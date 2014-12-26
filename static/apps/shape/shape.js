@@ -254,7 +254,6 @@ Shape.resetButtonClick = function() {
 };
 
 Shape.executeProgressively = function() {
-  BlocklyApps.log = [];
   BlocklyApps.ticks = 1000000;
 
   var code = Blockly.Generator.workspaceToCode('JavaScript');

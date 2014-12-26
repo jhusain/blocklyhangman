@@ -46,7 +46,7 @@ Blockly.Language['when_clicked'] = {
 Blockly.JavaScript['when_clicked'] = function(){
   // Create the code for a block of draw_line's for polygon rendering.
   var statements = Blockly.JavaScript.statementToCode(this, 'DO');
-  var code = 'window.oncanvasclick=function(e) {var clickX = e.offsetX; var clickY = e.offsetY;\n' + statements + '\nShape.executeProgressively();};'
+  var code = 'window.oncanvasclick=function(e) {var clickX = e.offsetX; var clickY = e.offsetY;  BlocklyApps.log = [];\n' + statements + '\nShape.executeProgressively();};'
   return code;
 };
 
