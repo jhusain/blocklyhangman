@@ -114,28 +114,41 @@ Shape.init = function() {
   // Initialize the slider.
   var sliderSvg = document.getElementById('slider');
   Shape.speedSlider = new Slider(10, 35, 130, sliderSvg);
-
+/*
   var defaultXml =
-	  '<xml>' +
-	  '		<block type="draw_polygon" x="62" y="40">' +
-	  ' 		<statement name="LINESTACK">' +
-	  '				<block type="draw_lineto">' +
-      '					<value name="XPOS"><block type="math_number"><title name="NUM">140</title></block></value>' +
-      '					<value name="YPOS"><block type="math_number"><title name="NUM">160</title></block></value>' +
-      '					<next>' +
-	  '						<block type="draw_lineto">' +
-      '							<value name="XPOS"><block type="math_number"><title name="NUM">70</title></block></value>' +
-      '							<value name="YPOS"><block type="math_number"><title name="NUM">232</title></block></value>' +
-      '						</block>' +
-      '					</next>' +
-      '				</block>' +
-      '			</statement>' +
-      '		</block>' +
+	    '<xml>' +
+    '<block type="variables_set" inline="true" x="185" y="115">' +
+    '<field name="VAR">clickX</field>' +
+    '<value name="VALUE">' +
+      '<block type="math_number">' +
+        '<field name="NUM">0</field>' +
+      '</block>' +
+    '</value>' +
+    '<next>' +
+      '<block type="variables_set" inline="true">' +
+        '<field name="VAR">clickY</field>' +
+        '<value name="VALUE">' +
+          '<block type="math_number">' +
+            '<field name="NUM">0</field>' +
+          '</block>' +
+        '</value>' +
+      '</block>' +
+    '</next>' +
+  '</block>' +
       '</xml>';
   BlocklyApps.loadBlocks(defaultXml);
+*/
 
   Shape.ctxDisplay = document.getElementById('display').getContext('2d');
   Shape.ctxScratch = document.getElementById('scratch').getContext('2d');
+  
+  document.getElementById('display').addEventListener("click", function(e) {
+    var oncanvasclick = window.oncanvasclick;
+    if (oncanvasclick) {
+      debugger;
+      window.oncanvasclick(e);
+    }
+  });
   Shape.reset();
 
   // Lazy-load the syntax-highlighting.
@@ -240,6 +253,25 @@ Shape.resetButtonClick = function() {
   Shape.reset();
 };
 
+Shape.executeProgressively = function() {
+  BlocklyApps.log = [];
+  BlocklyApps.ticks = 1000000;
+
+  var code = Blockly.Generator.workspaceToCode('JavaScript');
+  try {
+    eval(code);
+  } catch (e) {
+    // Null is thrown for infinite loop.
+    // Otherwise, abnormal termination is a user error.
+    if (e !== Infinity) {
+      alert(e);
+    }
+  }
+
+  // BlocklyApps.log now contains a transcript of all the user's actions.
+  // Animate the transcript.
+  Shape.pid = window.setTimeout(Shape.animate, 100);
+};
 
 /**
  * Execute the user's code.

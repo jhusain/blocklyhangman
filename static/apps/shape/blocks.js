@@ -25,6 +25,30 @@
 
 Blockly.JavaScript = Blockly.Generator.get('JavaScript');
 
+Blockly.Language['when_clicked'] = {
+  // move drawing point to x,y
+  helpUrl: '',
+  init: function() {
+    this.setColour(290);
+    this.setOutput(false);
+
+    var input = this.appendDummyInput()
+      .appendTitle('When canvas clicked')
+
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(BlocklyApps.getMsg('Shape_whenclicked'));
+    this.appendStatementInput('DO');
+  }
+};
+
+Blockly.JavaScript['when_clicked'] = function(){
+  // Create the code for a block of draw_line's for polygon rendering.
+  var statements = Blockly.JavaScript.statementToCode(this, 'DO');
+  var code = 'window.oncanvasclick=function(e) {var clickX = e.offsetX; var clickY = e.offsetY;\n' + statements + '\nShape.executeProgressively();};'
+  return code;
+};
 
 Blockly.Language.draw_movecursorto = {
   // move drawing point to x,y
